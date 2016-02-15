@@ -140,6 +140,18 @@ public class Tenori extends JFrame {
 		}
 	}
 	
+	public void addDefSounds() {
+		int snd = 1;
+		for (int j = 0; j < 16; j++){ //column
+			matrix[0][j].sound = snd;
+			matrix[0][j].note += 10;
+			// for (int i = 0; i < 16; i++ ) { //row
+			 //	matrix[i][j].sound += 8;
+			 //}
+		}
+			 	
+	}
+	
 	
 	/*
 	 * clear method clears the 16x16 matrix of illuminated buttons. 
