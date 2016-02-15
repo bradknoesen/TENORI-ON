@@ -15,7 +15,7 @@ import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Synthesizer;
 
-public class Midi {
+public class Midi implements Runnable{
     
     private final static int FUDGE_FACTOR = 10;
 
@@ -216,9 +216,15 @@ public class Midi {
 	delay( FUDGE_FACTOR * velocity );
 	midiChannel.noteOff( note, velocity );
     }
-    
-    
-    
+    /*
+    public void run(){
+    	try{
+    		//
+    		this.playInstrument();
+    	}
+    	catch(Exception e){System.out.println("Error: "+e);}
+    }
+    */
     
            
 
