@@ -10,6 +10,9 @@ public class SoundButton extends JToggleButton {
 	//The X and Y co-ord of the button
 	private final int x;
 	private final int y;
+
+	private int sound;	//stores the midi sound number
+	private int note	//stores the note
 	
 	private Tenori tenori;
 	
@@ -59,5 +62,17 @@ public class SoundButton extends JToggleButton {
 	
 	public Tenori getTenori(){
 		return this.tenori;
+	}
+	
+	public int getSound(){
+		return this.sound;
+	}
+	
+	public void setSound(int sound){
+		this.sound = sound;
+	}
+	
+	public void setNote(int note){
+		this.note = note;
 	}
 }
