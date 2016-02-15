@@ -12,7 +12,11 @@ import javax.swing.*;
 public class Tenori extends JFrame {
 	 private static String sample = "LCD";	
 	 private static String disp;
-	 private JPanel panelCenter = new JPanel();	 
+	 private JPanel panelCenter = new JPanel();
+	 
+	 //Instatiate midi and synth at start
+	 Midi midi = new Midi();
+	 Synthesizer synthesizer = midi.getSynthesizzer();
 
 	 final TextField LCD_disp 	= 	new TextField();
 	 
@@ -106,9 +110,16 @@ public class Tenori extends JFrame {
 	  * @Presley Kode
 	  */
 	 final class SoundButton extends JToggleButton {
-		 String name; 
-		 SoundButton (String s) {
-			 this.name = s;
+		 
+		 int x;
+		 int y;
+		 int sound;
+		 int note;
+		 int veloc = 20; //default val
+		 
+		 SoundButton (int x, int y) {
+			 this.x = x;
+			 this.y = y;
 			 setContentAreaFilled(false);
 			 setBorderPainted(false);
 			 setFocusPainted(false);
@@ -116,8 +127,14 @@ public class Tenori extends JFrame {
 			 addMouseListener (new MouseAdapter() {
 				 public void mouseClicked(MouseEvent me) {
 					 //produce sound
-					 
-					 
+					 try{
+					 	midi.playInstrument(synthesizer 
+									, this.y
+									, this.sound
+									, this.note
+									, this.veloc );
+					 }
+					 catch(Exception e){System.out.println("Error"+e);}
 				 }
 			 });
 		 }
@@ -131,7 +148,7 @@ public class Tenori extends JFrame {
 	public void populate(){
 		for (int i = 0; i < 16; i++){ //column
 			 for (int j = 0; j < 16; j++ ) { //row
-				 SoundButton button = new SoundButton("btn_" + j + "_" + i);
+				 SoundButton button = new SoundButton(i,j);		//store i/j coords
 				 button.setIcon(new ImageIcon("white.png"));
 				 button.setSelectedIcon(new ImageIcon("orange.png"));
 				 button.setEnabled(false);
