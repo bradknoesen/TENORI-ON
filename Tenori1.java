@@ -1,5 +1,5 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.*;
 
 public class Tenori {
@@ -20,8 +20,8 @@ public class Tenori {
 	final ModeButton R3 	= 	new ModeButton	("");
 	final ModeButton R4 	= 	new ModeButton	("");
 	
-	final OKButton OK 		= 	new OKButton	(""); 
-	final ONButton ON 		= 	new ONButton	("");
+	final OKButton OK 	= 	new OKButton	(""); 
+	final ONButton ON 	= 	new ONButton	("");
 	
 	SoundButton[][] matrix = new SoundButton[16][16];
 	
@@ -79,8 +79,8 @@ public class Tenori {
 	
 	public Tenori() {
 		GUI.setLayout(null);
-		panelCenter.setLayout(new GridLayout(16,16,0,0));
-		panelCenter.setBounds(85, 65, 430, 430);
+		panelCenter.setLayout(new GridLayout(16,16)); //this wouldn't exist
+		panelCenter.setBounds(80, 65, 430, 430);
 		
 		LCD_disp.setPreferredSize(new Dimension(250,30));
 		
@@ -145,11 +145,11 @@ public class Tenori {
 				SoundButton button = new SoundButton(i, j, this);
 				button.setIcon(new ImageIcon("white.png"));
 				button.setSelectedIcon(new ImageIcon("orange.png"));
-				matrix[j][i] = button;
+				matrix[j][i] = button; 
 				panelCenter.add(matrix[j][i]);
-				 
 			 }
 		}
+
 		
 		GUI.add(L1);
 		GUI.add(L2);
@@ -232,8 +232,8 @@ public class Tenori {
 				frame.setSize(600, 580);				
 				frame.add(t.getGUI());
 				frame.setVisible( true );
-			    frame.setLocationRelativeTo( null );
-			    frame.setResizable(false);
+			    	frame.setLocationRelativeTo( null );
+			    	frame.setResizable(false);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			}
 		};
