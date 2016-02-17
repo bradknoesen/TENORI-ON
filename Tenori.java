@@ -139,6 +139,15 @@ public class Tenori extends JFrame {
 				 }
 			 });
 		 }
+		 //Set button sound
+		 public void setSound(int sound){
+		 	this.sound = sound;
+		 }
+		 //Set sound velocity
+		 public void setVeloc(int veloc){
+		 	this.veloc = veloc;
+		 }
+
 	 }	
 	 
 	 
