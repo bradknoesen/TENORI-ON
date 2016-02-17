@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import javax.midi.Synthesizer;
 
 
 /*
@@ -16,7 +17,7 @@ public class Tenori extends JFrame {
 	 
 	 //Instatiate midi and synth at start
 	 Midi midi = new Midi();
-	 Synthesizer synthesizer = midi.getSynthesizzer();
+	 Synthesizer synthesizer = midi.getSynthesizer();
 
 	 final TextField LCD_disp 	= 	new TextField();
 	 
@@ -112,14 +113,14 @@ public class Tenori extends JFrame {
 	 final class SoundButton extends JToggleButton {
 		 
 		 int x;
-		 int y;
+		 int ycoord;		//helloooo
 		 int sound;
-		 int note;
-		 int veloc = 20; //default val
+		 int note = 40;
+		 int veloc = 65;
 		 
 		 SoundButton (int x, int y) {
 			 this.x = x;
-			 this.y = y;
+			 this.ycoord = y;		//see variable names...
 			 setContentAreaFilled(false);
 			 setBorderPainted(false);
 			 setFocusPainted(false);
@@ -129,10 +130,10 @@ public class Tenori extends JFrame {
 					 //produce sound
 					 try{
 					 	midi.playInstrument(synthesizer 
-									, this.y
-									, this.sound
-									, this.note
-									, this.veloc );
+									, ycoord	//note: refer back to this point
+									, sound
+									, note
+									, veloc );
 					 }
 					 catch(Exception e){System.out.println("Error"+e);}
 				 }
@@ -156,19 +157,21 @@ public class Tenori extends JFrame {
 			}	
 		}
 	}
-	
-	public void addDefSounds() {
-		int snd = 1;
-		for (int j = 0; j < 16; j++){ //column
-			matrix[0][j].sound = snd;
-			matrix[0][j].note += 10;
-			// for (int i = 0; i < 16; i++ ) { //row
-			 //	matrix[i][j].sound += 8;
-			 //}
-		}
-			 	
-	}
-	
+	/*
+	* assigns the default sounds to buttons at startup
+	* @Brad Knoesen
+	*/
+         public void addDefSounds(){
+	     int snd = 1;  //start with first intrument
+	     
+	     for (int x = 0; x<16; x++){
+		 for(int j = 0; j<16; j++){
+		     martix[j][x].sound = snd;  //same sound at every layer/row
+		     martix[x][x].note += 10;   //increment note of every button in layer row
+		 }
+		 snd += 8;      //add 8 to move to next instrument
+	     }
+	 }
 	
 	/*
 	 * clear method clears the 16x16 matrix of illuminated buttons. 
@@ -468,7 +471,8 @@ public class Tenori extends JFrame {
 		 
 		 panelCenter.setLayout(new GridLayout(16,16,0,0));
 
-		 populate();
+		 populate();	//populate matrix with buttons
+		 addDefSounds();	//assigns sounds to buttons
 
 		 for (int i = 0; i < 16; i++){ //column
 			 for (int j = 0; j < 16; j++ ) { //row
