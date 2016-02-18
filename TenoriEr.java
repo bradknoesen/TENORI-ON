@@ -141,14 +141,13 @@ public class Tenori
 
         GUI.add(sButtonGrid);
 
-
-        // Event handlers for ON  and OK
         ON.addActionListener(new ActionListener() 
         {
             public void actionPerformed(ActionEvent e) {
-                if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
+                if (SimoriOn.getInstance().getMode() instanceof OffMode) 
                 {
-                    L1.setEnabled(true);
+                	SimoriOn.getInstance().setMode(new PerformanceMode());
+                	L1.setEnabled(true);
 					L2.setEnabled(true);
 					L3.setEnabled(true);
 					L4.setEnabled(true);
@@ -160,7 +159,6 @@ public class Tenori
                     ON.setSelected(true);
                     System.out.println("ON/OFF button clicked: ON");
                     System.out.println((SimoriOn.getInstance().getMode()));
-                    SimoriOn.getInstance().setMode(new PerformanceMode());
                     for (int i = 0; i < 16; i++){ 		
 						for (int j = 0; j < 16; j++ ) { 
 							matrix[j][i].setEnabled(true);
@@ -171,6 +169,7 @@ public class Tenori
                 else 
                 {
                 	clear();
+                	SimoriOn.getInstance().setMode(new OffMode());
                 	L1.setEnabled(false);
 					L2.setEnabled(false);
 					L3.setEnabled(false);
@@ -180,8 +179,6 @@ public class Tenori
 					R3.setEnabled(false);
 					R4.setEnabled(false);
 					OK.setEnabled(false);
-                    SimoriOn.getInstance().setMode(new OnOffMode());
-                    System.out.println((SimoriOn.getInstance().getMode()));
                     System.out.println("ON/OFF button clicked: OFF");
                     for (int i = 0; i < 16; i++){ 		
                     	for (int j = 0; j < 16; j++ ) { 
@@ -196,241 +193,7 @@ public class Tenori
             public void actionPerformed(ActionEvent e) {
                 System.out.println("OK button clicked");
             }
-        });
-
-        // Event handlers for L1-4
-        L1.addActionListener(new ActionListener() 
-        {
-            public void actionPerformed(ActionEvent e) 
-            {
-                System.out.println("L1 button clicked");
-                if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	clockHand = new ClockHand(SimoriOn.getInstance().getTenori());
-                	(new Thread(clockHand)).start();
-                	L1.setSelected(true);
-                	return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    L1.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R2.setBackground(null);
-                    R3.setBackground(null);
-                    R4.setBackground(null);
-                    L2.setBackground(null);
-                    L3.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                    clockHand.running.set(false);
-                    L1.setSelected(false);
-                }
-            }
-        });
-
-        L2.addActionListener(new ActionListener() 
-        {
-            public void actionPerformed(ActionEvent e) 
-            {
-                System.out.println("L2 button clicked");
-            
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    L2.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R2.setBackground(null);
-                    R3.setBackground(null);
-                    R4.setBackground(null);
-                    L1.setBackground(null);
-                    L3.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }
-        });
-
-        L3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) 
-            {
-                System.out.println("L3 button clicked");
-            
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    L3.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R2.setBackground(null);
-                    R3.setBackground(null);
-                    R4.setBackground(null);
-                    L1.setBackground(null);
-                    L2.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }
-            
-        });
-
-        L4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) 
-            {
-                System.out.println("L4 button clicked");
-            
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    L4.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R2.setBackground(null);
-                    R3.setBackground(null);
-                    R4.setBackground(null);
-                    L1.setBackground(null);
-                    L2.setBackground(null);
-                    L3.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }
-        });
-
-        // Event handlers for R1-4
-        R1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("R1 button clicked");
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    R1.setBackground(Color.ORANGE);
-                    R2.setBackground(null);
-                    R3.setBackground(null);
-                    R4.setBackground(null);
-                    L1.setBackground(null);
-                    L2.setBackground(null);
-                    L3.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }
-        });
-
-        R2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("R2 button clicked");
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    R2.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R3.setBackground(null);
-                    R4.setBackground(null);
-                    L1.setBackground(null);
-                    L2.setBackground(null);
-                    L3.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }
-        });
-
-        R3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("R3 button clicked");
-                
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    R3.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R2.setBackground(null);
-                    R4.setBackground(null);
-                    L1.setBackground(null);
-                    L2.setBackground(null);
-                    L3.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }
-        });
-
-        R4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("R4 button clicked");
-            
-            if (SimoriOn.getInstance().getMode() instanceof OnOffMode) 
-                {
-                	//If OnOffMode, then do nothing
-                    return;
-                } 
-                else 
-                {
-                    SimoriOn.getInstance().setMode(new VoiceChangeMode());
-                    R4.setBackground(Color.ORANGE);
-                    R1.setBackground(null);
-                    R2.setBackground(null);
-                    R3.setBackground(null);
-                    L1.setBackground(null);
-                    L2.setBackground(null);
-                    L3.setBackground(null);
-                    L4.setBackground(null);
-                    //for(SoundButton button : matrix)
-                    //{
-                    //	button.turnOff();
-                    //}
-                }
-            }    
-        });
+        }); 
 
     }
 
@@ -447,28 +210,11 @@ public class Tenori
     
     public void highlightColumnAndRow(int x, int y) 
     {
-        //for (int i = 0; i < this.matrix.length; i++) {
-        //    matrix[i].turnOff();
-        //}
-        
-        //for (int i = 0; i < 16; i++) {
-        //    getButton(x, i).turnOn();
-        //    getButton(i, y).turnOn();
-        //}
+
     }
 
     public void highlightColumn(int x)
     {
-
-        //for (SoundButton button : matrix) {
-        //   if(!(SoundButton.getButtonsSelected().contains(button))) {
-        //        button.turnOff();
-        //    }
-        //}
-
-        //for (int i=0; i < 16; i+=5) {
-        //    getButton(x, i).turnOn();
-        //}
 
     }
     
@@ -509,6 +255,6 @@ public class Tenori
     }
 
     public static void main(String[] argv){
-	makeGUI();
+    	makeGUI();
     }
 }
