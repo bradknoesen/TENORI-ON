@@ -8,7 +8,7 @@ public class Tenori
     private JPanel sButtonGrid = new JPanel();
     private ClockHand clockHand;
 
-    final JTextField LCD 	= 	new JTextField(); //html to make it the right size and a nice font
+    final JTextField LCD 	= 	new JTextField();
 
     final ModeButton L1 	= 	new ModeButton	("");
     final ModeButton L2 	= 	new ModeButton	("");
@@ -57,7 +57,7 @@ public class Tenori
 
     public Tenori() 
     {
-        GUI.setLayout(null);
+    	GUI.setLayout(null);
         sButtonGrid.setLayout(new GridLayout(16, 16));
         sButtonGrid.setBounds(65, 65, 440, 440);
         
@@ -113,16 +113,11 @@ public class Tenori
         LCD.setBounds(130, 510, 200, 40);
         LCD.setEditable(false);
 
-        //for (int i = 0; i < 16 * 16; i++) 
-        //{
-        //    matrix[i] = new SoundButton(i % 16, (int) i / 16, this);
-        //    grid.add(matrix[i]);
-        //}
         
         for (int i = 0; i < 16; i++){ //column
 			 for (int j = 0; j < 16; j++ ) { //row
-				 matrix[j][i] = new SoundButton(i, j, this);
-				 sButtonGrid.add(matrix[j][i]);
+				 matrix[i][j] = new SoundButton(i, j, this);
+				 sButtonGrid.add(matrix[i][j]);
 			 }
         }
 
@@ -140,13 +135,13 @@ public class Tenori
 
 
         GUI.add(sButtonGrid);
-
-        ON.addActionListener(new ActionListener() 
+        
+        ON.addMouseListener (new MouseAdapter() 
         {
-            public void actionPerformed(ActionEvent e) {
-                if (SimoriOn.getInstance().getMode() instanceof OffMode) 
+        	public void mouseClicked (MouseEvent me) {
+                if (Device.getInstance().getMode() instanceof OffMode) 
                 {
-                	SimoriOn.getInstance().setMode(new PerformanceMode());
+                	Device.getInstance().setMode(new PerformanceMode());
                 	L1.setEnabled(true);
 					L2.setEnabled(true);
 					L3.setEnabled(true);
@@ -158,7 +153,6 @@ public class Tenori
 					OK.setEnabled(true);
                     ON.setSelected(true);
                     System.out.println("ON/OFF button clicked: ON");
-                    System.out.println((SimoriOn.getInstance().getMode()));
                     for (int i = 0; i < 16; i++){ 		
 						for (int j = 0; j < 16; j++ ) { 
 							matrix[j][i].setEnabled(true);
@@ -169,7 +163,7 @@ public class Tenori
                 else 
                 {
                 	clear();
-                	SimoriOn.getInstance().setMode(new OffMode());
+                	Device.getInstance().setMode(new OffMode());
                 	L1.setEnabled(false);
 					L2.setEnabled(false);
 					L3.setEnabled(false);
@@ -189,12 +183,77 @@ public class Tenori
             }
         });
         
-        OK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("OK button clicked");
+        OK.addMouseListener (new MouseAdapter() {
+            public void mouseClicked (MouseEvent me) {
+                System.out.println("OK");
             }
-        }); 
+        });
+        
+        L1.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent me){
+        		System.out.println("L1 button clicked");
+        		if (Device.getInstance().getMode() instanceof OffMode){
+        			JOptionPane.showMessageDialog(null, "Please turn on the Tenori!");
+        			return;
+        		}
+        		else {
+        			Device.getInstance().setMode(new VoiceChangeMode());
+        			L1.setSelected(true);
+        			clear();
+        		}
+        		
+        	}
+        });
+        
+        L2.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent me){
+        		System.out.println("L2 button clicked");
+        		if (Device.getInstance().getMode() instanceof OffMode){
+        			JOptionPane.showMessageDialog(null, "Please turn on the Tenori!");
+        			return;
+        		}
+        		else {
+        			L2.setSelected(true);
+        			clear();
+        		}
+        		
+        	}
+        });
 
+        
+        L3.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent me){
+        		System.out.println("L3 button clicked");
+        		if (Device.getInstance().getMode() instanceof OffMode){
+        			JOptionPane.showMessageDialog(null, "Please turn on the Tenori!");
+        			return;
+        		}
+        		else {
+        			L3.setSelected(true);
+        			clear();
+        		}
+        		
+        	}
+        });
+        
+        
+        L4.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent me){
+        		System.out.println("L4 button clicked");
+        		if (Device.getInstance().getMode() instanceof OffMode){
+        			JOptionPane.showMessageDialog(null, "Please turn on the Tenori!");
+        			return;
+        		}
+        		else {
+        			L4.setSelected(true);
+        			clear();
+        		}
+        		
+        	}
+        });
+        
+        
+        
     }
 
 
@@ -208,14 +267,35 @@ public class Tenori
         return matrix[x][y];
     }
     
-    public void highlightColumnAndRow(int x, int y) 
+    public void clockHandHighLight(int x)
     {
+    	for (int i = 0; i < 16; i++){ //column
+			 for (int j = 0; j < 16; j++ ) { //row
+				 if (!(SoundButton.getButtonsSelected().contains(matrix[j][i])))
+				 matrix[j][i].Off();
+				 
+			 }
+    	}
+    	
+    	for (int k = 0; k < 16; k+=5 ){
+    		getButton(x, k).On();
+    		
+    	}
 
     }
-
-    public void highlightColumn(int x)
+    
+    public void modeButtonHighLight(int x, int y) 
     {
-
+    	for (int i = 0; i < 16; i++){ //column
+			 for (int j = 0; j < 16; j++ ) { //row
+				 matrix[i][j].Off();
+			 }
+    	}
+    	
+    	for (int k = 0; k < 16; k++ ){
+    		getButton(x, k).On();
+    		getButton(k, y).On();
+    	}
     }
     
 	public void clear() {
