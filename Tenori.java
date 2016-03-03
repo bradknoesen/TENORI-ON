@@ -1,13 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.sound.midi.Synthesizer;
 
+/*
+ * Simulation of a simplified version of the Yamaha Tenori-ON.
+ * @authors Bradley Knoesen, Presley Kode, Kate Mawbey, Eneida Morina, David Olagunju.
+ * @Date 25/02/2016.
+*/
 public class Tenori 
 {
     private JPanel GUI = new JPanel();
     private JPanel sButtonGrid = new JPanel();
     private ClockHand clockHand;
 
+    //Instantiate midi and synth at start to play sounds. 
+    Midi midi = new Midi();
+    Synthesizer synthesizer = midi.getSynthesizer();
+
+    //Instantiate the text field and the mode buttons.
     final JTextField LCD 	= 	new JTextField();
 
     final ModeButton L1 	= 	new ModeButton	("");
@@ -15,16 +26,35 @@ public class Tenori
     final ModeButton L3 	= 	new ModeButton	("");
     final ModeButton L4 	= 	new ModeButton	("");
 
-    final ModeButton R1 	= 	new ModeButton	("");
-	final ModeButton R2 	= 	new ModeButton	("");
-	final ModeButton R3 	= 	new ModeButton	("");
-	final ModeButton R4 	= 	new ModeButton	("");
+    final ModeButton R1  	= 	new ModeButton	("");
+    final ModeButton R2 	= 	new ModeButton	("");
+    final ModeButton R3 	= 	new ModeButton	("");
+    final ModeButton R4 	= 	new ModeButton	("");
 
-	final OKButton OK 		= 	new OKButton	(""); 
-	final ONButton ON 		= 	new ONButton	("");
+    final OKButton OK 		= 	new OKButton	(""); 
+    final ONButton ON 		= 	new ONButton	("");
 
+    final DirectButton UP 	= 	new DirectButton(""); 
+    final DirectButton DOWN = 	new DirectButton("");
+
+    //Matrix which stores all the sound buttons. 
     SoundButton[][] matrix = new SoundButton[16][16];
     
+    /*
+     * ON Button class defines the visuals of the ON button to turn the 
+     * Tenori-ON machine on/off.
+     * @Eneida Morina
+     * @Kate Mawbey
+     */
+    final class DirectButton extends JButton {
+		 DirectButton (String s){
+			 super( s );
+			 setContentAreaFilled(false);
+			 setBorderPainted(false);
+			 setFocusPainted(false);
+		 }
+	 }
+
     final class ONButton extends JButton {
 		 ONButton (String s){
 			 super( s );
@@ -34,7 +64,13 @@ public class Tenori
 		 }
 	 }
 	 
-	 final class OKButton extends JButton {
+    /*
+     * OK Button class defines the visuals of the OK button to turn the 
+     * Tenori-ON machine on/off.
+     * @Eneida Morina
+     * @Kate Mawbey
+     */
+    final class OKButton extends JButton {
 		 OKButton (String s) {
 			 super( s );
 			 setContentAreaFilled(false);
@@ -44,7 +80,11 @@ public class Tenori
 		 }
 	 }
     
-    
+    /*
+     * Mode Button class defines a button to be used for the eight mode buttons. 
+     * @David Olagunju
+     * @Eneida Morina
+     */
     final class ModeButton extends JButton {
     	ModeButton (String s){
     		super(s);
@@ -55,12 +95,17 @@ public class Tenori
     	}
     }
 
+    /*
+     * Constructor to create a new Tenori with all the buttons added to it and their
+     * functionalities.      
+     * @authors Bradley Knoesen, Presley Kode, Kate Mawbey, Eneida Morina and David Olagunju.
+     */   
     public Tenori() 
     {
     	GUI.setLayout(null);
         sButtonGrid.setLayout(new GridLayout(16, 16));
         sButtonGrid.setBounds(65, 65, 440, 440);
-        
+ 
         ON.setBounds(250, 5, 70, 50);
 		ON.setEnabled(true);
 		ON.setIcon(new ImageIcon("img/ON.png"));
@@ -113,6 +158,11 @@ public class Tenori
         LCD.setBounds(130, 510, 200, 40);
         LCD.setEditable(false);
 
+        UP.setBounds(70, 500,25, 25);
+		UP.setIcon(new ImageIcon("img/UP.png"));
+
+        DOWN.setBounds(70, 525, 25, 25);
+		DOWN.setIcon(new ImageIcon("img/DOWN.png"));
         
         for (int i = 0; i < 16; i++){ //column
 			 for (int j = 0; j < 16; j++ ) { //row
@@ -120,6 +170,7 @@ public class Tenori
 				 sButtonGrid.add(matrix[i][j]);
 			 }
         }
+
 
         GUI.add(L1);
         GUI.add(L2);
@@ -132,10 +183,18 @@ public class Tenori
         GUI.add(ON);
         GUI.add(OK);
         GUI.add(LCD);
+        GUI.add(UP);
+        GUI.add(DOWN);
 
 
         GUI.add(sButtonGrid);
         
+	//Method defines the operations of the On button.
+	//When ON button hasn't been clicked, only the ON button is enabled
+	// and all others are disabled. 
+	//Once ON button is clicked on, the tenori device continues in Performance
+	// mode meaning all buttons are turned on. 
+	//@authors Bradley Knoesen, Eneida Morina and David Olagunju. 
         ON.addMouseListener (new MouseAdapter() 
         {
         	public void mouseClicked (MouseEvent me) {
@@ -152,6 +211,8 @@ public class Tenori
 					R4.setEnabled(true);
 					OK.setEnabled(true);
                     ON.setSelected(true);
+                    UP.setSelected(true);
+                    DOWN.setSelected(true);
                     System.out.println("ON/OFF button clicked: ON");
                     for (int i = 0; i < 16; i++){ 		
 						for (int j = 0; j < 16; j++ ) { 
@@ -159,6 +220,8 @@ public class Tenori
 						}
                     }
                     LCD.setText("LCD");
+		    //Clock hand implementation. Works however is slow and needs improvements. 
+		    //@authors David Olagunju.
                     clockHand = new ClockHand(Device.getInstance().getTenori());
                     (new Thread(clockHand)).start();
                 }
@@ -181,11 +244,17 @@ public class Tenori
                     		matrix[i][j].setEnabled(false);
                     	}
                     }
-                    clockHand.running.set(false);
-                }
+		   // while(clockHand.running != false){
+		    	clockHand.running.set(false);
+		    //}                
+		}
             }
         });
         
+
+	//Method to display correct message when the OK button is clicked on. 
+	//Only displays message if button is enabled, else displays an error message. 
+	//@authors Kate Mawbey, Eneida Morina. 
         OK.addMouseListener (new MouseAdapter() {
             public void mouseClicked (MouseEvent me) {
                 System.out.println("OK");
@@ -199,7 +268,11 @@ public class Tenori
                 }
             }
         });
-        
+
+	
+       // Methods to display correct message when the L1 button is clicked on.
+       // Only displays message if button is enabled, else displays an error message. 
+       // @Kate Mawbey, Eneida Morina. 	
         L1.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L1 button clicked");
@@ -208,14 +281,18 @@ public class Tenori
         			return;
         		}
         		else {
-        			Device.getInstance().setMode(new VoiceChangeMode());
-        			L1.setSelected(true);
+				//Future implementation - moving from methods to classes. 
+        			//Device.getInstance().setMode(new ChangeVoiceMode());
+        			//L1.setSelected(true);
         			clear();
         		}
         		
         	}
         });
-        
+
+         // Methods to display correct message when the L2 button is clicked on.
+	 // Only displays message if button is enabled, else displays an error message. 
+	 // @Kate Mawbey, Eneida Morina. 
         L2.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L2 button clicked");
@@ -231,7 +308,10 @@ public class Tenori
         	}
         });
 
-        
+
+        // Methods to display correct message when the L3 button is clicked on.
+	// Only displays message if button is enabled, else displays an error message. 
+        // @Kate Mawbey, Eneida Morina.       
         L3.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L3 button clicked");
@@ -247,7 +327,9 @@ public class Tenori
         	}
         });
         
-        
+        // Methods to display correct message when the L4 button is clicked on.
+	//Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 
         L4.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L4 button clicked");
@@ -263,6 +345,9 @@ public class Tenori
         	}
         });
         
+	// Methods to display correct message when the R1 button is clicked on.
+	//Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 
         R1.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("R1 button clicked");
@@ -271,14 +356,17 @@ public class Tenori
         			return;
         		}
         		else {
-        			Device.getInstance().setMode(new VoiceChangeMode());
-        			R1.setSelected(true);
+        			//Device.getInstance().setMode(new ChangeVoiceMode());
+        			//R1.setSelected(true);
         			clear();
         		}
         		
         	}
         });
         
+        // Methods to display correct message when the R2 button is clicked on.
+        // Only displays message if button is enabled, else displays an error message. 
+        // @Kate Mawbey, Eneida Morina. 	
         R2.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("R2 button clicked");
@@ -287,14 +375,18 @@ public class Tenori
         			return;
         		}
         		else {
-        			Device.getInstance().setMode(new VoiceChangeMode());
-        			R2.setSelected(true);
+        			//Device.getInstance().setMode(new ChangeVoiceMode());
+        			//R2.setSelected(true);
         			clear();
+					clockHand.running.set(false);
         		}
         		
         	}
         });
-        
+
+        // Methods to display correct message when the R3 button is clicked on.
+        // Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 
         R3.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("R3 button clicked");
@@ -303,14 +395,18 @@ public class Tenori
         			return;
         		}
         		else {
-        			Device.getInstance().setMode(new VoiceChangeMode());
-        			R3.setSelected(true);
+        			//Device.getInstance().setMode(new ChangeVoiceMode());
+        			//R3.setSelected(true);
         			clear();
+					clockHand.running.set(false);
         		}
         		
         	}
         });
         
+        // Methods to display correct message when the R4 button is clicked on.
+	// Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 
         R4.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("R4 button clicked");
@@ -319,15 +415,29 @@ public class Tenori
         			return;
         		}
         		else {
-        			Device.getInstance().setMode(new VoiceChangeMode());
-        			R4.setSelected(true);
+        			//Device.getInstance().setMode(new ChangeVoiceMode());
+        			//R4.setSelected(true);
         			clear();
         		}
         		
         	}
         });
-        
+        addDefSounds();
     }
+
+      
+        //Method to add the default sounds to the matrix. 
+	//@authors Bradley Knoesen and Presley Kode. 
+    	public void addDefSounds() {
+		int snd = 1;
+		for (int x = 0; x <16; x++){
+			for (int j = 0; j<16; j++){
+				matrix[x][j].setSound(snd);
+				}
+			snd+=8;
+		}
+	}
+
 
 
     public JPanel getTenori() 
@@ -340,6 +450,9 @@ public class Tenori
         return matrix[x][y];
     }
     
+
+    // Method to display the clock hand on the screen by selecting the buttons. 
+    // @author David Olagunju. 
     public void clockHandHighLight(int x)
     {
     	for (int i = 0; i < 16; i++){ //column
@@ -356,6 +469,8 @@ public class Tenori
     	}
     }
     
+    // Method to highlight the whole row and column when a button is clicked. 
+    // @authors David Olagunju, Presley Kode. 
     public void modeButtonHighLight(int x, int y) 
     {
     	for (int i = 0; i < 16; i++){ //column
@@ -369,7 +484,11 @@ public class Tenori
     		getButton(k, y).On();
     	}
     }
-    
+
+
+	// Method to clear all the buttons that have been selected. 
+	// Is called by the mode buttons. 
+	// @authors Eneida Morina, Bradley Knoesen.     
 	public void clear() {
 		for (int i = 0; i < 16; i++){ //column
 			 for (int j = 0; j < 16; j++ ) { //row
@@ -378,6 +497,16 @@ public class Tenori
 		}
 	}
 
+
+	// Method to return the synthesizer. 
+	// @authors Bradley Knoesen. 
+	public Synthesizer getSynth(){
+		return this.synthesizer;
+	}
+
+	
+    // Method to create a new GUI. 
+    // @authors Bradley Knoesen, Presley Kode, Kate Mawbey, Eneida Morina, David Olagunju. 
     public static Tenori makeGUI()
     {
         final Tenori g = new Tenori();
@@ -404,6 +533,7 @@ public class Tenori
         };
         SwingUtilities.invokeLater(runnable);
         return g;
+
     }
 
     public static void main(String[] argv){
