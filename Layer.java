@@ -1,5 +1,11 @@
 public class Layer 
 {
+	private int sound;	//store sound in layer class
+	
+	public void setSound(int sound){
+		this.sound = sound;
+	}
+	
 	private boolean[] buttonArray = new boolean[16 * 16];
 	
 	public boolean[] getLayer()
