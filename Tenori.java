@@ -510,8 +510,9 @@ public class Tenori
     // @authors Bradley Knoesen, Presley Kode, Kate Mawbey, Eneida Morina, David Olagunju. 
     public static Tenori makeGUI()
     {
-        //singleton
-        if (GUI == null){
+        //Singleton
+        private static Tenori g = new Tenori();
+        if (g == null){
        		final Tenori g = new Tenori();
        }
         
