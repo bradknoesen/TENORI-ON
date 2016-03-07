@@ -100,8 +100,10 @@ public class Tenori
      * functionalities.      
      * @authors Bradley Knoesen, Presley Kode, Kate Mawbey, Eneida Morina and David Olagunju.
      */   
-    public Tenori() 
-    {
+    private Tenori() 
+    {					//changed to private for singleton
+    	
+    	
     	GUI.setLayout(null);
         sButtonGrid.setLayout(new GridLayout(16, 16));
         sButtonGrid.setBounds(65, 65, 440, 440);
@@ -439,7 +441,6 @@ public class Tenori
 	}
 
 
-
     public JPanel getTenori() 
     {
         return this.GUI;
@@ -509,7 +510,12 @@ public class Tenori
     // @authors Bradley Knoesen, Presley Kode, Kate Mawbey, Eneida Morina, David Olagunju. 
     public static Tenori makeGUI()
     {
-        final Tenori g = new Tenori();
+        //singleton
+        if (GUI == null){
+       		final Tenori g = new Tenori();
+       }
+        
+        //final Tenori g = new Tenori();
 
         Runnable runnable = new Runnable() {
 
