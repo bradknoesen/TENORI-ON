@@ -1,4 +1,6 @@
-
+/*
+ * @authors Bradley Knoesen, Presley Kode
+ */
 
 public class ChangeVoiceMode implements Mode{
     
