@@ -2,6 +2,7 @@ public class Layer
 {
 	private int sound;	//store sound in layer class
 	private int loopSpeed;
+	private int loopPoint;
 	
 	public void setSound(int sound)
 	{
@@ -11,6 +12,11 @@ public class Layer
 	public void setLoopSpeed(int loopSpeed)
 	{
 		this.loopSpeed = loopSpeed;
+	}
+	
+	public void setLoopPoint(int loopPoint)
+	{
+		this.loopPoint = loopPoint;
 	}
 	
 	private boolean[] buttonArray = new boolean[16 * 16];
