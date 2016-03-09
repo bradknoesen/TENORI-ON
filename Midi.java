@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class Midi
 {
-    
+  //Store instument names in array index corresponds to midi number
   private final static int FUDGE_FACTOR = 10;
 
 	static private String instruments[] = {"ACOUSTIC GRAND PIANO","BRIGHT ACOUSTIC PIANO","ELECTRIC GRAND PIANO",
