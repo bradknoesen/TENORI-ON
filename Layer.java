@@ -6,7 +6,14 @@ public class Layer
 	
 	public void setSound(int sound)
 	{
-		this.sound = sound;
+		if (sound > -1 && sound < 129)
+		{
+			this.sound = sound;
+		}
+		else
+		{
+			System.out.println("Sound out of range exception");	//add exception
+		}
 	}
 	
 	public void setLoopSpeed(int loopSpeed)
@@ -16,7 +23,14 @@ public class Layer
 	
 	public void setLoopPoint(int loopPoint)
 	{
-		this.loopPoint = loopPoint;
+		if (loopPoint < 0 || loopPoint > 128)
+		{
+			System.out.println("Loop Point out of range exception!");	//add exception
+		}
+		else
+		{
+			this.loopPoint = loopPoint;	
+		}
 	}
 	
 	private boolean[] buttonArray = new boolean[16 * 16];
