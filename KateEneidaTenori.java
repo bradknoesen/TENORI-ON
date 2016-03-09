@@ -283,10 +283,11 @@ public class Tenori
             }
         });
 
-	
-       // Methods to display correct message when the L1 button is clicked on.
-       // Only displays message if button is enabled, else displays an error message. 
-       // @Kate Mawbey, Eneida Morina. 	
+	//Change Voice Mode
+	//
+	// Methods to display correct message when the L1 button is clicked on.
+       	// Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 	
         L1.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L1 button clicked");
@@ -303,10 +304,11 @@ public class Tenori
         		
         	}
         });
-
-         // Methods to display correct message when the L2 button is clicked on.
-	 // Only displays message if button is enabled, else displays an error message. 
-	 // @Kate Mawbey, Eneida Morina. 
+	//Change Velocity Mode
+	//
+        // Methods to display correct message when the L2 button is clicked on.
+	// Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 
         L2.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L2 button clicked");
@@ -315,6 +317,7 @@ public class Tenori
         			return;
         		}
         		else {
+        			Device.getInstance().setMode(new ChangeVelocityMode());
         			L2.setSelected(true);
         			clear();
         		}
@@ -322,7 +325,8 @@ public class Tenori
         	}
         });
 
-
+	//Change Loop Speed Mode
+	//
         // Methods to display correct message when the L3 button is clicked on.
 	// Only displays message if button is enabled, else displays an error message. 
         // @Kate Mawbey, Eneida Morina.       
@@ -334,13 +338,15 @@ public class Tenori
         			return;
         		}
         		else {
+        			Device.getInstance().setMode(new ChangeLoopSpeedMode());
         			L3.setSelected(true);
         			clear();
         		}
         		
         	}
         });
-        
+        //Change Loop Point Mode
+        //
         // Methods to display correct message when the L4 button is clicked on.
 	//Only displays message if button is enabled, else displays an error message. 
 	// @Kate Mawbey, Eneida Morina. 
@@ -352,13 +358,15 @@ public class Tenori
         			return;
         		}
         		else {
+        			Device.getInstance().setMode(new ChangeLoopPointMode());
         			L4.setSelected(true);
         			clear();
         		}
         		
         	}
         });
-        
+        //Change Layer Mode
+        //
 	// Methods to display correct message when the R1 button is clicked on.
 	//Only displays message if button is enabled, else displays an error message. 
 	// @Kate Mawbey, Eneida Morina. 
@@ -370,14 +378,16 @@ public class Tenori
         			return;
         		}
         		else {
-        			//Device.getInstance().setMode(new ChangeVoiceMode());
-        			//R1.setSelected(true);
+        			Device.getInstance().setMode(new ChangeLayerMode());
+        			R1.setSelected(true);
         			clear();
         		}
         		
         	}
         });
         
+        //Save Configuration Mode
+        //
         // Methods to display correct message when the R2 button is clicked on.
         // Only displays message if button is enabled, else displays an error message. 
         // @Kate Mawbey, Eneida Morina. 	
@@ -400,7 +410,8 @@ public class Tenori
         		
         	}
         });
-
+	//Load Configuration Mode
+	//
         // Methods to display correct message when the R3 button is clicked on.
         // Only displays message if button is enabled, else displays an error message. 
 	// @Kate Mawbey, Eneida Morina. 
@@ -423,7 +434,8 @@ public class Tenori
         		
         	}
         });
-        
+        //Master/Slave Mode
+        //
         // Methods to display correct message when the R4 button is clicked on.
 	// Only displays message if button is enabled, else displays an error message. 
 	// @Kate Mawbey, Eneida Morina. 
