@@ -9,6 +9,11 @@ public class ChangeVoiceMode implements Mode{
     	private Device dev;
     	dev.getTenori();
     	
+    	//Change Voice Mode
+	//
+	// Methods to display correct message when the L1 button is clicked on.
+       	// Only displays message if button is enabled, else displays an error message. 
+	// @Kate Mawbey, Eneida Morina. 
     	dev.L1.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent me){
         		System.out.println("L1 button clicked");
